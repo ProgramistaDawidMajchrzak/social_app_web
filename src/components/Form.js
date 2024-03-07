@@ -1,22 +1,32 @@
-import React from 'react'
+import React from 'react';
+import Loading from '../assets/loading.svg';
 
-export function PrimaryButton({ value, style, onClick }) {
+export function PrimaryButton({ value, style, loading }) {
     return (
-        <input
-            type='submit'
-            style={style}
-            value={value}
-            onClick={onClick}
-            className='primary-button'
-        />
+        <>
+            <button
+                type='submit'
+                style={style}
+                className='primary-button'
+            >
+                {loading
+                    ?
+                    <img src={Loading} class='loading-spinner' alt="loading-gif" />
+                    :
+                    value
+                }
+            </button>
+
+        </>
+
     )
 }
 
-export function AuthInput({ value, style, onChange, type, placeholder }) {
+export function AuthInput({ value, style, onChange, type, placeholder, error }) {
     return (
         <input
             type={type}
-            style={style}
+            style={{ ...style, border: `${error ? '2px solid #f96363' : 'none'}` }}
             value={value}
             onChange={onChange}
             placeholder={placeholder}

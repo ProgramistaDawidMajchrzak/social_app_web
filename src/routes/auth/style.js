@@ -33,6 +33,15 @@ export const AuthContainer = styled.div`
                         }
                     }
                 }
+                .errors{
+                    margin: .5rem 0;
+                    list-style: none;
+                    li{
+                        color: #f96363;
+                        font-size: .8rem;
+                        font-weight: 600;
+                    }
+                }
             }
         }
     }
