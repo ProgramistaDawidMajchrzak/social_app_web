@@ -6,9 +6,11 @@ import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { Motion } from '../../components/Motion';
 import { login, register } from '../../services/auth.service';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../features/userSlice';
+
 
 function AuthLayout() {
-
     return (
         <S.AuthContainer>
             <div className="auth-container">
@@ -25,6 +27,7 @@ export default AuthLayout;
 
 export function LoginForm() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -43,8 +46,10 @@ export function LoginForm() {
             try {
                 const data = await login(formData);
                 setLoading(false);
-                console.log(data);
-                navigate('/home');
+                console.log(data.user);
+                localStorage.setItem('accessToken', data.access_token);
+                dispatch(setUser(data.user));
+                navigate('/board');
             } catch (error) {
                 console.error('Error fetching data:', error.response.data);
                 setErrors(error.response.data);

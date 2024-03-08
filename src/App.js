@@ -4,9 +4,11 @@ import {
   Routes,
 } from "react-router-dom";
 import AuthLayout, { LoginForm, RegisterForm } from "./routes/auth/Auth";
-import Home from './routes/home/Home';
+import Board from './routes/panel/board/Board';
+import Friends from './routes/panel/friends/Friends';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PanelLayout from './routes/panel/PanelLayout';
 
 function App() {
   return (
@@ -16,12 +18,10 @@ function App() {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
         </Route>
-        <Route path="/home" element={<Home />} />
-        {/* <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/blog/*" element={<BlogApp />} />
-        <Route path="/users/*" element={<UserApp />} />
-      </Route> */}
+        <Route element={<PanelLayout />}>
+          <Route path="/board" element={<Board />} />
+          <Route path="/friends" element={<Friends />} />
+        </Route>
       </Routes>
       <ToastContainer
         autoClose={2500}

@@ -11,7 +11,7 @@ export function PrimaryButton({ value, style, loading }) {
             >
                 {loading
                     ?
-                    <img src={Loading} class='loading-spinner' alt="loading-gif" />
+                    <img src={Loading} className='loading-spinner' alt="loading-gif" />
                     :
                     value
                 }

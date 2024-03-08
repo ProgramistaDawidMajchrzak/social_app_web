@@ -6,8 +6,7 @@ export const AuthContainer = styled.div`
     .auth-container{
         width: 100%;
         height: 100%;
-        //background-color: var(--main-color);
-        background-image: linear-gradient(45deg, var(--main-color), #6f78bd);
+        background-image: linear-gradient(45deg, var(--main-color), #4c5d70);
         div{
             width: 400px;
             height: 60%;

@@ -5,7 +5,7 @@ export const fetchData = async () => {
         const response = await request.get('/posts');
         return response.data;
     } catch (error) {
-        console.error('Error fetching data:', error);
+        console.log(error);
         throw error;
     }
 };
@@ -15,7 +15,7 @@ export const login = async (body) => {
         const response = await request.post('/auth/login', body);
         return response.data;
     } catch (error) {
-        console.error('Error posting data:', error);
+        console.log(error);
         throw error;
     }
 };
@@ -24,16 +24,16 @@ export const register = async (body) => {
         const response = await request.post('/auth/register', body);
         return response.data;
     } catch (error) {
-        console.error('Error posting data:', error);
+        console.log(error);
         throw error;
     }
 };
 export const logout = async () => {
     try {
-        const response = await request.post('/auth/register');
+        const response = await request.post('/auth/logout');
         return response.data;
     } catch (error) {
-        console.error('Error posting data:', error);
+        console.log(error);
         throw error;
     }
 };
