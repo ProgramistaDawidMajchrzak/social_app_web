@@ -100,6 +100,9 @@ export const BoardEl = styled.div`
             display: flex;
             align-items: center;
             gap: .6rem;
+            .fa-heart{
+                cursor: pointer;
+            }
             p{
                 font-size: .7rem;
             }

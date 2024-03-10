@@ -6,6 +6,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { allPosts } from '../../../services/posts.service';
 import UserImg from '../../../assets/user-sample.png';
 import { format } from 'date-fns';
+import { addLike, deleteLike } from '../../../services/likes.service';
 
 function Board() {
     const user = useSelector((state) => state.user);
@@ -98,6 +99,9 @@ function Board() {
 export default Board;
 
 function BoardElement({ post }) {
+    const [likingProcess, setLikingProcess] = useState(false);
+    const [isLikedByMe, setIsLikedByMe] = useState(post.is_liked_by_me);
+    const [likesCount, setLikesCount] = useState(post.likes_count);
 
     const formatDate = (date) => {
         return format(new Date(date), 'EEEE, MMM d, h:mm a');
@@ -119,6 +123,33 @@ function BoardElement({ post }) {
                 }
         }
     };
+
+    const handleLike = async (is_liked_by_me) => {
+        if (!likingProcess) {
+            setLikingProcess(true);
+            if (!isLikedByMe) {
+                try {
+                    const data = await addLike(post.id);
+                    setLikingProcess(false);
+                    setIsLikedByMe(true);
+                    setLikesCount(prevCount => prevCount + 1);
+                    console.log(data);
+                } catch (error) {
+                    console.error('Error adding like:', error.response.data);
+                }
+            } else {
+                try {
+                    const data = await deleteLike(post.id);
+                    setLikingProcess(false);
+                    setIsLikedByMe(false);
+                    setLikesCount(prevCount => prevCount - 1);
+                    console.log(data);
+                } catch (error) {
+                    console.error('Error deleting like:', error.response.data);
+                }
+            }
+        }
+    }
 
     return (
         <S.BoardEl>
@@ -143,11 +174,11 @@ function BoardElement({ post }) {
             <div className="post-action">
                 <div className="action-el">
                     <i
-                        className="fa-regular fa-lg fa-heart"
+                        className={`${isLikedByMe ? 'fa-solid' : 'fa-regular'} fa-lg fa-heart`}
                         style={{ color: 'var(--main-color)' }}
-                    // onClick={handleLike(post.is_liked_by_me)}
+                        onClick={() => handleLike(post.is_liked_by_me)}
                     ></i>
-                    <p>{post.likes_count} {handleActionEnding(post.likes_count, 'like')}</p>
+                    <p>{likesCount} {handleActionEnding(likesCount, 'like')}</p>
                 </div>
                 <div className="action-el">
                     <i
