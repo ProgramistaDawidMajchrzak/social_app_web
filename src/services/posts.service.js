@@ -1,8 +1,8 @@
 import request from './request';
 
-export const allPosts = async () => {
+export const allPosts = async (page) => {
     try {
-        const response = await request.get('/posts');
+        const response = await request.get(`/posts?page=${page}`);
         return response.data;
     } catch (error) {
         console.log(error);
