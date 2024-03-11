@@ -9,6 +9,8 @@ import Friends from './routes/panel/friends/Friends';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PanelLayout from './routes/panel/PanelLayout';
+import MyFriends from './routes/panel/friends/my_friends/MyFriends';
+import AllPeople from './routes/panel/friends/all_people/AllPeople';
 
 function App() {
   return (
@@ -20,7 +22,10 @@ function App() {
         </Route>
         <Route element={<PanelLayout />}>
           <Route path="/board" element={<Board />} />
-          <Route path="/friends" element={<Friends />} />
+          <Route element={<Friends />}>
+            <Route path="/friends" element={<MyFriends />} />
+            <Route path="/all-people" element={<AllPeople />} />
+          </Route>
         </Route>
       </Routes>
       <ToastContainer

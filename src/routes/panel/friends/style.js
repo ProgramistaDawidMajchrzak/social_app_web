@@ -93,5 +93,30 @@ export const FriendElStyle = styled.div`
     }
 `;
 
-export const FriendInvElSkeleton = styled.div`
+export const FriendsStyle = styled.div`
+    .friends-nav{
+        display: flex;
+        margin: .8rem 1.4rem;
+        a{
+            display: block;
+            padding: .5rem .7rem;
+            border: 2px solid var(--main-color);
+            background-color: var(--gray);
+            color: var(--main-color);
+            text-decoration: none;
+            font-size: .7rem;
+            font-weight: 700;
+            &:first-child {
+                border-radius: .4rem 0 0 .4rem;
+            }
+
+            &:last-child {
+                border-radius: 0 .4rem .4rem 0;
+            }
+        }
+        .active{
+            background-color: var(--main-color);
+            color: var(--gray);
+        }
+    }
 `;

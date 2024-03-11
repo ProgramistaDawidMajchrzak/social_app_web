@@ -8,6 +8,7 @@ import { clearUser } from '../../features/userSlice';
 import { logout } from '../../services/auth.service';
 import loadingGif from '../../assets/loading-dark.svg';
 import FriendsInvitations from './friends/FriendsInvitations';
+import AdSample from '../../assets/ad-sample.png';
 
 function PanelLayout() {
     const user = useSelector((state) => state.user);
@@ -96,6 +97,7 @@ function PanelLayout() {
                     </div>
                     <div className="panel-sidebar right-side">
                         <FriendsInvitations />
+                        <Advertise />
                     </div>
                 </div>
             </div>
@@ -103,4 +105,15 @@ function PanelLayout() {
     )
 }
 
-export default PanelLayout
+export default PanelLayout;
+
+function Advertise() {
+    return (
+        <S.Ad>
+            <img src={AdSample} alt="adv" />
+            <h4>Special offer: 20% off today</h4>
+            <a href="https://adidas.com">https://adidas.com</a>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </S.Ad>
+    )
+}

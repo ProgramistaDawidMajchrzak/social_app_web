@@ -28,10 +28,15 @@ function FriendsInvitations() {
         fetchAllInvitations();
     }, [refresh]);
 
+    const handleSubmit = e => {
+        e.preventDefault();
+        navigate('/friends');
+    }
+
     return (
         <S.FriendsSidebar>
             <div className="inv-section">
-                <h4>Your invitations to friends</h4>
+                <h4>Invitations to friends</h4>
                 <div className="inv-scrollbar">
                     {(invitations && invitations.length !== 0) &&
                         invitations.map(inv =>
@@ -42,7 +47,7 @@ function FriendsInvitations() {
                             />)
                     }
                     {(invitations && invitations.length === 0) &&
-                        <form onSubmit={() => navigate('/friends')} className="no-inv-info">
+                        <form onSubmit={(e) => handleSubmit(e)} className="no-inv-info">
                             <p>You have no invitations to friendship</p>
                             <PrimaryButton
                                 value='Find new friends'

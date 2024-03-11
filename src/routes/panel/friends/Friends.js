@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import * as S from './style';
-import UserImg from '../../../assets/user-sample.png';
-import { format } from 'date-fns';
-import { acceptInvitation, cancelInvitationOrFriendship } from '../../../services/friends.service';
+import { NavLink, Outlet } from 'react-router-dom';
+
 
 function Friends() {
     return (
-        <div>Friends</div>
+        <S.FriendsStyle>
+            <div className="friends-nav">
+                <NavLink to='/friends'>MY FRIENDS</NavLink>
+                <NavLink to='/all-people'>ALL PEOPLE</NavLink>
+            </div>
+            <Outlet />
+        </S.FriendsStyle>
     )
 }
 

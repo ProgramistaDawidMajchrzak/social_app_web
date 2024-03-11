@@ -86,6 +86,7 @@ export const LayoutStyle = styled.div`
             }
             .right-side{
                 width: 29% !important;
+                position: relative;
             }
         }
     }
@@ -133,5 +134,45 @@ export const Navigation = styled.div`
             }
         }
         
+    }
+`;
+
+export const Ad = styled.div`
+    position: absolute;
+    width: 80%;
+    height: 300px;
+    background-color: var(--gray);
+    border-radius: .4rem;
+    bottom: 1rem;
+    left: 50%;
+    transform: translate(-50%, 0);
+    img{
+        width: 90%;
+        height: auto;
+        margin-top: 1rem;
+        border-radius: .4rem;
+        position: relative;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    h4, a, p{
+        padding: 0 1rem;
+    }
+    h4{
+        color: black;
+        font-weight: 600;
+        margin: .2rem 0;
+    }
+    a{
+        text-decoration: none;
+        font-size: .7rem;
+        font-weight: 600;
+        margin: 0;
+    }
+    p{
+        font-size: .6rem;
+        color: gray;
+        font-weight: 500;
+        margin: 0;
     }
 `;
