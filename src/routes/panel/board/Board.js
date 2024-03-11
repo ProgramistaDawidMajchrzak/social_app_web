@@ -9,7 +9,6 @@ import { format } from 'date-fns';
 import { addLike, deleteLike } from '../../../services/likes.service';
 import { addComment, getComments } from '../../../services/comments.service';
 import Loading from '../../../assets/loading.svg';
-import LoadingDots from '../../../assets/loading-dots.svg';
 
 function Board() {
     const user = useSelector((state) => state.user);

@@ -7,6 +7,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { clearUser } from '../../features/userSlice';
 import { logout } from '../../services/auth.service';
 import loadingGif from '../../assets/loading-dark.svg';
+import FriendsInvitations from './friends/FriendsInvitations';
 
 function PanelLayout() {
     const user = useSelector((state) => state.user);
@@ -94,7 +95,7 @@ function PanelLayout() {
                         <Outlet />
                     </div>
                     <div className="panel-sidebar right-side">
-                        friend invitations
+                        <FriendsInvitations />
                     </div>
                 </div>
             </div>

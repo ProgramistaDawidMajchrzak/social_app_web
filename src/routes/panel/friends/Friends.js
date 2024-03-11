@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+import * as S from './style';
+import UserImg from '../../../assets/user-sample.png';
+import { format } from 'date-fns';
+import { acceptInvitation, cancelInvitationOrFriendship } from '../../../services/friends.service';
 
 function Friends() {
     return (
@@ -7,3 +11,5 @@ function Friends() {
 }
 
 export default Friends;
+
+
