@@ -16,7 +16,7 @@ export const BoardEl = styled.div`
     height: auto;
     margin-bottom: 1rem;
     border-radius: .5rem;
-    padding: .8rem;
+    padding: .8rem .8rem 0 .8rem;
     position: relative;
     &:first-child {
         margin-top: 1.6rem; 
@@ -29,11 +29,6 @@ export const BoardEl = styled.div`
         display: flex;
         gap: .8rem;
         margin-bottom: .8rem;
-        .img{
-            height: 50px;
-            width: 50px;
-            border-radius: 50px;
-        }
         .img{
             height: 50px;
             width: 50px;
@@ -90,8 +85,6 @@ export const BoardEl = styled.div`
     .post-action{
         height: 50px;
         padding-right: 1rem;
-        position: absolute;
-        bottom: 0;
         margin: 0;
         display: flex;
         gap: 1.4rem;
@@ -108,6 +101,73 @@ export const BoardEl = styled.div`
             }
         }
     }
-
+    .add-comment-area{
+        height: 50px;
+        width: 100%;
+        padding: 0 1rem 0 1rem;
+        form{
+            display: flex;
+            input[type="text"]{
+                background-color: var(--gray);
+                padding: .4rem .8rem;
+                width: 88%;
+                border: 1px solid var(--main-color);
+            }
+            button[type="submit"]{
+                background-color: var(--main-color);
+                border: none;
+                cursor: pointer;
+                width: 30px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                img{
+                    width: 25px;
+                    height: 25px;
+                    margin: 0;
+                }
+            }
+        }
+    }
+    .comment-area{
+        padding: 0 1rem;
+        .comment{
+            width: 100%;
+            height: auto;
+            .img{
+                width: 35px !important;
+                height: 35px !important;
+                border-radius: 35px !important;
+            }
+            .post-info{
+                h6{
+                    margin: 0 0 .1rem 0;
+                    span{
+                        margin-left: 0 !important;
+                        color: black;
+                        font-size: .8rem;
+                        font-weight: 600;
+                    }
+                }
+                p{
+                    font-size: .7rem;
+                }
+            }
+            .comment-content{
+                margin-top: .4rem;
+                padding: 0 1rem;
+                p{
+                    font-size: .9rem;
+                    line-height: 1.4rem;
+                }
+            }
+        }
+        .show-more{
+            color: #54B1F6;
+            font-size: .7rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    }
     
 `;

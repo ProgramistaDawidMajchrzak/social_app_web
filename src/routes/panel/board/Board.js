@@ -7,6 +7,9 @@ import { allPosts } from '../../../services/posts.service';
 import UserImg from '../../../assets/user-sample.png';
 import { format } from 'date-fns';
 import { addLike, deleteLike } from '../../../services/likes.service';
+import { addComment, getComments } from '../../../services/comments.service';
+import Loading from '../../../assets/loading.svg';
+import LoadingDots from '../../../assets/loading-dots.svg';
 
 function Board() {
     const user = useSelector((state) => state.user);
@@ -102,6 +105,14 @@ function BoardElement({ post }) {
     const [likingProcess, setLikingProcess] = useState(false);
     const [isLikedByMe, setIsLikedByMe] = useState(post.is_liked_by_me);
     const [likesCount, setLikesCount] = useState(post.likes_count);
+    const [commentsCount, setCommentsCount] = useState(post.comments_count);
+
+    const [commentProcess, setCommentProcess] = useState(false);
+    const [comment, setComment] = useState('');
+
+    const [allComments, setAllComments] = useState([]);
+
+    const [firstCommentMoment, setFirstCommentMoment] = useState(false);
 
     const formatDate = (date) => {
         return format(new Date(date), 'EEEE, MMM d, h:mm a');
@@ -124,30 +135,56 @@ function BoardElement({ post }) {
         }
     };
 
-    const handleLike = async (is_liked_by_me) => {
+    const handleLike = async () => {
         if (!likingProcess) {
             setLikingProcess(true);
             if (!isLikedByMe) {
                 try {
-                    const data = await addLike(post.id);
+                    await addLike(post.id);
                     setLikingProcess(false);
                     setIsLikedByMe(true);
                     setLikesCount(prevCount => prevCount + 1);
-                    console.log(data);
                 } catch (error) {
                     console.error('Error adding like:', error.response.data);
                 }
             } else {
                 try {
-                    const data = await deleteLike(post.id);
+                    await deleteLike(post.id);
                     setLikingProcess(false);
                     setIsLikedByMe(false);
                     setLikesCount(prevCount => prevCount - 1);
-                    console.log(data);
                 } catch (error) {
                     console.error('Error deleting like:', error.response.data);
                 }
             }
+        }
+    }
+
+    const handleSubmitComment = async (e, post_id) => {
+        e.preventDefault();
+        if (comment.length && !commentProcess) {
+            setCommentProcess(true);
+            try {
+                await addComment(post_id, { 'comment': comment });
+                handleShowAllComments(post.id);
+                // if (post.firstcomment == null) {
+                //     setFirstCommentMoment(true);
+                // }
+                setCommentProcess(false);
+                setComment('');
+            } catch (error) {
+                console.error('Error fetching data:', error.response.data);
+            }
+        }
+    }
+
+    const handleShowAllComments = async (post_id) => {
+        try {
+            const data = await getComments(post_id);
+            setAllComments(data);
+            setCommentsCount(data.length);
+        } catch (error) {
+            console.error('Error fetching data:', error.response.data);
         }
     }
 
@@ -176,7 +213,7 @@ function BoardElement({ post }) {
                     <i
                         className={`${isLikedByMe ? 'fa-solid' : 'fa-regular'} fa-lg fa-heart`}
                         style={{ color: 'var(--main-color)' }}
-                        onClick={() => handleLike(post.is_liked_by_me)}
+                        onClick={handleLike}
                     ></i>
                     <p>{likesCount} {handleActionEnding(likesCount, 'like')}</p>
                 </div>
@@ -185,10 +222,86 @@ function BoardElement({ post }) {
                         className="fa-regular fa-lg fa-comment"
                         style={{ color: 'var(--main-color)' }}
                     ></i>
-                    <p>{post.comments_count} {handleActionEnding(post.comments_count, 'comment')}</p>
+                    <p>{commentsCount} {handleActionEnding(commentsCount, 'comment')}</p>
                 </div>
             </div>
+            {commentsCount !== 0 &&
+                <div className="comment-area">
+                    {allComments.length === 0 &&
+                        <div className="comment">
+                            <div className="flex">
+                                <div className="img">
+                                    <img src={UserImg} alt="user-sample" />
+                                </div>
+                                <div className='post-info'>
+                                    <h6><span>{post.firstcomment.user_name}</span></h6>
+                                    <p>{formatDate(post.firstcomment.created_at)}</p>
+                                </div>
+                            </div>
+                            <div className="comment-content">
+                                <p>{post.firstcomment.comment}</p>
+                            </div>
+                        </div>
+                    }
+                    {(commentsCount > 1 && allComments.length === 0) &&
+                        <p
+                            className='show-more'
+                            onClick={() => handleShowAllComments(post.id)}
+                        >
+                            Show {commentsCount - 1} more {handleActionEnding(commentsCount - 1, 'comment')}
+                        </p>
+
+                    }
+                    {allComments.length !== 0 &&
+                        allComments.map(comment => <Comment key={comment.id} comment={comment} />)
+                    }
+                </div>
+            }
+            <div className="add-comment-area">
+                <form onSubmit={e => handleSubmitComment(e, post.id)}>
+                    <input
+                        type="text"
+                        placeholder='Write comment..'
+                        value={comment}
+                        onChange={e => setComment(e.target.value)}
+                    />
+                    <button type="submit">
+                        {commentProcess ?
+                            <img src={Loading} className='loading-spinner' alt="loading-gif" />
+                            :
+                            <i
+                                className="fa-regular fa-plus"
+                                style={{ color: 'var(--white)' }}
+                            ></i>
+                        }
+                    </button>
+                </form>
+            </div>
         </S.BoardEl>
+    )
+}
+
+function Comment({ comment }) {
+
+    const formatDate = (date) => {
+        return format(new Date(date), 'EEEE, MMM d, h:mm a');
+    };
+
+    return (
+        <div className="comment">
+            <div className="flex">
+                <div className="img">
+                    <img src={UserImg} alt="user-sample" />
+                </div>
+                <div className='post-info'>
+                    <h6><span>{comment.user_name}</span></h6>
+                    <p>{formatDate(comment.created_at)}</p>
+                </div>
+            </div>
+            <div className="comment-content">
+                <p>{comment.comment}</p>
+            </div>
+        </div>
     )
 }
 
