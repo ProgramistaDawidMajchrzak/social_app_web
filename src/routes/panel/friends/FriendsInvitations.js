@@ -30,7 +30,7 @@ function FriendsInvitations() {
 
     const handleSubmit = e => {
         e.preventDefault();
-        navigate('/friends');
+        navigate('/all-people');
     }
 
     return (

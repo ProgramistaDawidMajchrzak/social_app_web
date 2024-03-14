@@ -120,3 +120,86 @@ export const FriendsStyle = styled.div`
         }
     }
 `;
+
+export const MyFriendsContainer = styled.div`
+    width: 100%;
+    height: 100%;
+    padding: 0 1.6rem;
+    height: 100%;
+    overflow-y: scroll;
+`;
+
+export const FriendViewStyle = styled.div`
+    min-width: 400px;
+    width: 80%;
+    height: auto;
+    background-color: var(--white);
+    margin-bottom: .5rem;
+    padding: .7rem 0;
+    border-radius: .4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .flex{
+        margin-left: .8rem;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        gap: .8rem;
+        .img{
+            height: 40px;
+            width: 40px;
+            border-radius: 40px;
+            overflow: hidden;
+            img{
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+        .skeleton-author{
+            width: 400px;
+            margin-top: .2rem;
+        }
+        .friend-info{
+            h6{
+                font-size: .9rem;
+                font-weight: 600;
+                margin: 0 0 .2rem 0;
+            }
+            p{
+                margin: 0;
+                color: grey;
+                font-size: .8rem;
+            }
+        }
+    }
+    .action{
+            margin-right: .8rem;
+            height: 100%;
+            button{
+                position: relative;
+                top: 50%;
+                border: none;
+                border-radius: .2rem;
+                width: 40px;
+                height: 24px;
+                cursor: pointer;
+            }
+            .remove{
+                background-color: #bf1616;
+            }
+            .add{
+                background-color: #117e11;
+            }
+            .pending{
+                background-color: #a3a30c;
+                width: 60px !important;
+                margin-right: .8rem;
+                cursor: default !important;
+                i{
+                    margin: 0 5px;
+                }
+            }
+        }
+`;
