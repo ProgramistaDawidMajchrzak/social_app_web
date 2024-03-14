@@ -7,20 +7,17 @@ import { getMyFriends, cancelInvitationOrFriendship, addInvitation } from '../..
 import Skeleton from 'react-loading-skeleton';
 import { useSelector } from 'react-redux';
 
-function MyFriends() {
+function MyFriends({ refreshInv, setRefreshInv }) {
 
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
 
     const [friends, setFriends] = useState(null);
     const [loadingFriends, setLoadingFriends] = useState(true);
-    const [refresh, setRefresh] = useState(false);
 
     const fetchAllFriends = async () => {
         try {
             const data = await getMyFriends();
-            console.log('data.friends');
-            console.log(data.friends);
             setFriends(data.friends);
             setLoadingFriends(false);
         } catch (error) {
@@ -30,7 +27,7 @@ function MyFriends() {
 
     useEffect(() => {
         fetchAllFriends();
-    }, [refresh]);
+    }, [refreshInv]);
 
     return (
         <S.MyFriendsContainer>
@@ -38,15 +35,15 @@ function MyFriends() {
                 friends.map(friendRes =>
                     <FriendViewElement
                         route='my_friends'
-                        refresh={refresh}
-                        setRefresh={setRefresh}
+                        refresh={refreshInv}
+                        setRefresh={setRefreshInv}
                         myId={user.id}
                         res={friendRes}
                         key={friendRes.id}
                     />)
             }
             {(friends && friends.length === 0) &&
-                <p>You have no frinds for now</p>
+                <p>You have no friends for now</p>
 
             }
             {loadingFriends &&

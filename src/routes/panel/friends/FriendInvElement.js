@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { acceptInvitation, cancelInvitationOrFriendship } from '../../../services/friends.service';
 
 
-function FriendInvElement({ refresh, setRefresh, invitation }) {
+function FriendInvElement({ type, refresh, setRefresh, invitation }) {
 
     const [invProcess, setInvProcess] = useState(false);
 
@@ -37,18 +37,24 @@ function FriendInvElement({ refresh, setRefresh, invitation }) {
                     <img src={UserImg} alt="user-sample" />
                 </div>
                 <div className='post-info'>
-                    <h6>{invitation.sender.name}</h6>
+                    {type === 'receive' ?
+                        <h6>{invitation.sender.name}</h6>
+                        :
+                        <h6>{invitation.recipient.name}</h6>
+                    }
                     <p>{formatDate(invitation.created_at)}</p>
                 </div>
             </div>
             <div className="inv-action">
-                <button className='accept'>
-                    <i
-                        className='fa-solid fa-check'
-                        style={{ color: 'var(--gray)' }}
-                        onClick={() => handleInvAction('accept')}
-                    ></i>
-                </button>
+                {type === 'receive' &&
+                    <button className='accept'>
+                        <i
+                            className='fa-solid fa-check'
+                            style={{ color: 'var(--gray)' }}
+                            onClick={() => handleInvAction('accept')}
+                        ></i>
+                    </button>
+                }
                 <button className='decline'>
                     <i
                         className='fa-solid fa-xmark'

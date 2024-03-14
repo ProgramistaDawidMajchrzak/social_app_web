@@ -3,17 +3,14 @@ import { getAllPeople } from '../../../../services/friends.service';
 import * as S from '../style';
 import { FriendViewElement, FriendViewElementSkeleton } from '../my_friends/MyFriends';
 
-function AllPeople() {
+function AllPeople({ refreshInv, setRefreshInv }) {
 
     const [people, setPeople] = useState(null);
     const [loadingPeople, setLoadingPeople] = useState(true);
-    const [refresh, setRefresh] = useState(false);
 
     const fetchAllPeople = async () => {
         try {
             const data = await getAllPeople();
-            console.log('data.people');
-            console.log(data.people);
             setPeople(data.people);
             setLoadingPeople(false);
         } catch (error) {
@@ -23,7 +20,7 @@ function AllPeople() {
 
     useEffect(() => {
         fetchAllPeople();
-    }, [refresh]);
+    }, [refreshInv]);
 
 
     return (
@@ -32,9 +29,9 @@ function AllPeople() {
                 people.map(peopleRes =>
                     <FriendViewElement
                         route='all_people'
-                        refresh={refresh}
+                        refresh={refreshInv}
                         myId={null}
-                        setRefresh={setRefresh}
+                        setRefresh={setRefreshInv}
                         res={peopleRes}
                         key={peopleRes.id}
                     />)

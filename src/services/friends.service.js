@@ -10,6 +10,16 @@ export const getMyInvitations = async () => {
     }
 };
 
+export const getSentInvitations = async () => {
+    try {
+        const response = await request.get('/friends/sent-invitations');
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
 export const getMyFriends = async () => {
     try {
         const response = await request.get('/friends');

@@ -10,7 +10,7 @@ import loadingGif from '../../assets/loading-dark.svg';
 import FriendsInvitations from './friends/FriendsInvitations';
 import AdSample from '../../assets/ad-sample.png';
 
-function PanelLayout() {
+function PanelLayout({ refreshInv, setRefreshInv }) {
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -96,8 +96,17 @@ function PanelLayout() {
                         <Outlet />
                     </div>
                     <div className="panel-sidebar right-side">
-                        <FriendsInvitations />
-                        <Advertise />
+                        <FriendsInvitations
+                            refreshInv={refreshInv}
+                            setRefreshInv={setRefreshInv}
+                            type='receive'
+                        />
+                        <FriendsInvitations
+                            refreshInv={refreshInv}
+                            setRefreshInv={setRefreshInv}
+                            type='sent'
+                        />
+                        {/* <Advertise /> */}
                     </div>
                 </div>
             </div>
