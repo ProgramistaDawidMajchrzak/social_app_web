@@ -7,6 +7,11 @@ export const BoardStyle = styled.div`
         padding: 0 1.8rem;
         height: calc(100vh - 62px);
     }
+    .user-view-overflow{
+        overflow-y: scroll;
+        padding: 0 1.8rem;
+        height: calc(100vh - 284px);
+    }
 `;
 
 export const BoardEl = styled.div`
@@ -53,6 +58,7 @@ export const BoardEl = styled.div`
                     font-weight: 700;
                     &:first-child {
                         margin-right: .5rem; 
+                        cursor: pointer;
                     }
 
                     &:last-child {
@@ -168,6 +174,27 @@ export const BoardEl = styled.div`
             font-weight: 700;
             cursor: pointer;
         }
+    }  
+`;
+
+export const AddPostStyle = styled.div`
+    height: 160px;
+    width: 100%;
+    background-color: var(--white);
+    border-radius: .5rem;
+    margin: 1.4rem 0;
+    form{
+        margin: .8rem 1.2rem;
+        padding-top: .8rem;
+        input, textarea{
+            border: 1px solid var(--main-color);
+            border-radius: .3rem;
+            padding: .2rem .7rem;
+            resize: none;
+            &::placeholder{
+                font-family: 'Montserrat';
+                color: grey;
+            }
+        }
     }
-    
 `;

@@ -30,6 +30,16 @@ export const getMyFriends = async () => {
     }
 };
 
+export const getUserFriends = async (user_id) => {
+    try {
+        const response = await request.get(`/friends/by-user/${user_id}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
 export const getAllPeople = async () => {
     try {
         const response = await request.get('/user/all');

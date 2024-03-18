@@ -166,6 +166,7 @@ export const FriendViewStyle = styled.div`
                 font-size: .9rem;
                 font-weight: 600;
                 margin: 0 0 .2rem 0;
+                cursor: pointer;
             }
             p{
                 margin: 0;

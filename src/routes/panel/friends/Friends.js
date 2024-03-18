@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as S from './style';
 import { NavLink, Outlet } from 'react-router-dom';
 

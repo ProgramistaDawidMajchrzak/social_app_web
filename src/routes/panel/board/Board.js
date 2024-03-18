@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import * as S from './style';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -9,9 +8,9 @@ import { format } from 'date-fns';
 import { addLike, deleteLike } from '../../../services/likes.service';
 import { addComment, getComments } from '../../../services/comments.service';
 import Loading from '../../../assets/loading.svg';
+import { useNavigate } from 'react-router-dom';
 
 function Board() {
-    const user = useSelector((state) => state.user);
     const [currentPage, setCurrentPage] = useState(1);
     const [posts, setPosts] = useState([]);
     const [loadingPosts, setLoadingPosts] = useState(true);
@@ -36,14 +35,6 @@ function Board() {
     useEffect(() => {
         const handleScroll = () => {
             const { scrollTop, scrollHeight, clientHeight } = boardContainerRef.current;
-
-            // if (scrollTop + clientHeight >= scrollHeight - 1) {
-            //     console.log(loadingMorePosts);
-            //     if (!loadingMorePosts && !noMorePosts) {
-            //         console.log(loadingMorePosts);
-            //         setCurrentPage(prevPage => prevPage + 1);
-            //     }
-            // }
             if (scrollTop === 0 && !loadingMorePosts && !noMorePosts) {
                 setCurrentPage(prevPage => prevPage + 1);
             } else if (scrollTop + clientHeight >= scrollHeight - 1) {
@@ -76,6 +67,7 @@ function Board() {
                     </>
                     :
                     <>
+                        <AddPostSection />
                         {posts.map(post =>
                             <BoardElement
                                 post={post}
@@ -100,7 +92,10 @@ function Board() {
 
 export default Board;
 
-function BoardElement({ post }) {
+export function BoardElement({ post }) {
+
+    const navigate = useNavigate();
+
     const [likingProcess, setLikingProcess] = useState(false);
     const [isLikedByMe, setIsLikedByMe] = useState(post.is_liked_by_me);
     const [likesCount, setLikesCount] = useState(post.likes_count);
@@ -110,8 +105,6 @@ function BoardElement({ post }) {
     const [comment, setComment] = useState('');
 
     const [allComments, setAllComments] = useState([]);
-
-    const [firstCommentMoment, setFirstCommentMoment] = useState(false);
 
     const formatDate = (date) => {
         return format(new Date(date), 'EEEE, MMM d, h:mm a');
@@ -195,7 +188,7 @@ function BoardElement({ post }) {
                 </div>
                 <div className='post-info'>
                     <h6>
-                        <span>{post.author.name}</span>
+                        <span onClick={() => navigate(`/user/${post.author.id}/posts`)}>{post.author.name}</span>
                         created post titled:
                         <span>{post.title}</span>
                     </h6>
@@ -233,7 +226,7 @@ function BoardElement({ post }) {
                                     <img src={UserImg} alt="user-sample" />
                                 </div>
                                 <div className='post-info'>
-                                    <h6><span>{post.firstcomment.user_name}</span></h6>
+                                    <h6><span onClick={() => navigate(`/user/${post.author.id}/posts`)}>{post.firstcomment.user_name}</span></h6>
                                     <p>{formatDate(post.firstcomment.created_at)}</p>
                                 </div>
                             </div>
@@ -281,6 +274,7 @@ function BoardElement({ post }) {
 }
 
 function Comment({ comment }) {
+    const navigate = useNavigate();
 
     const formatDate = (date) => {
         return format(new Date(date), 'EEEE, MMM d, h:mm a');
@@ -293,7 +287,7 @@ function Comment({ comment }) {
                     <img src={UserImg} alt="user-sample" />
                 </div>
                 <div className='post-info'>
-                    <h6><span>{comment.user_name}</span></h6>
+                    <h6><span onClick={() => navigate(`/user/${comment.user_id}/posts`)}>{comment.user_name}</span></h6>
                     <p>{formatDate(comment.created_at)}</p>
                 </div>
             </div>
@@ -304,7 +298,7 @@ function Comment({ comment }) {
     )
 }
 
-function BoardSkeleton() {
+export function BoardSkeleton() {
     return (
         <S.BoardEl>
             <div className="flex">
@@ -315,3 +309,29 @@ function BoardSkeleton() {
         </S.BoardEl>
     )
 }
+
+function AddPostSection() {
+
+    const [title, setTitle] = useState("");
+    const [desc, setDesc] = useState("");
+
+    return (
+        <S.AddPostStyle>
+            <form>
+                <input
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
+                    type="text"
+                    placeholder='Title'
+                />
+                <textarea
+                    value={desc}
+                    onChange={e => setDesc(e.target.value)}
+                    placeholder='Write post'
+                    cols="60"
+                    rows="4"
+                ></textarea>
+            </form>
+        </S.AddPostStyle>
+    );
+};

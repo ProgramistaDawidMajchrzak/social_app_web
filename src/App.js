@@ -13,6 +13,8 @@ import PanelLayout from './routes/panel/PanelLayout';
 import MyFriends from './routes/panel/friends/my_friends/MyFriends';
 import AllPeople from './routes/panel/friends/all_people/AllPeople';
 import UserView from './routes/panel/user/UserView';
+import UserPosts from './routes/panel/user/UserPosts';
+import UserFriends from './routes/panel/user/UserFriends';
 
 function App() {
   const [refreshInv, setRefreshInv] = useState(false);
@@ -29,7 +31,10 @@ function App() {
             <Route path="/friends" element={<MyFriends refreshInv={refreshInv} setRefreshInv={setRefreshInv} />} />
             <Route path="/all-people" element={<AllPeople refreshInv={refreshInv} setRefreshInv={setRefreshInv} />} />
           </Route>
-          <Route path="/user/:id" element={<UserView />} />
+          <Route element={<UserView />}>
+            <Route path="/user/:userId/posts" element={<UserPosts />} />
+            <Route path="/user/:userId/friends" element={<UserFriends refreshInv={refreshInv} setRefreshInv={setRefreshInv} />} />
+          </Route>
         </Route>
       </Routes>
       <ToastContainer

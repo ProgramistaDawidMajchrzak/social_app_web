@@ -10,6 +10,16 @@ export const allPosts = async (page) => {
     }
 };
 
+export const allPostsByUser = async (user_id, page) => {
+    try {
+        const response = await request.get(`/posts/by-user/${user_id}?page=${page}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
 export const addPost = async (body) => {
     try {
         const response = await request.post('/auth/login', body);

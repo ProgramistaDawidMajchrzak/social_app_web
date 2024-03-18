@@ -1,8 +1,8 @@
 import request from './request';
 
-export const fetchData = async () => {
+export const getUser = async (id) => {
     try {
-        const response = await request.get('/posts');
+        const response = await request.get(`/user/${id}`);
         return response.data;
     } catch (error) {
         console.log(error);
