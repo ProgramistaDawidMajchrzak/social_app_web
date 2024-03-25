@@ -3,9 +3,15 @@ import * as S from './style';
 import UserImg from '../../../assets/user-sample.png';
 import { format } from 'date-fns';
 import { acceptInvitation, cancelInvitationOrFriendship } from '../../../services/friends.service';
+import { useDispatch } from 'react-redux';
+import { increaseFriendsValue, decreaseFriendsValue } from '../../../features/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 function FriendInvElement({ type, refresh, setRefresh, invitation }) {
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [invProcess, setInvProcess] = useState(false);
 
@@ -19,8 +25,12 @@ function FriendInvElement({ type, refresh, setRefresh, invitation }) {
             try {
                 if (status === 'accept') {
                     await acceptInvitation(invitation.id);
+                    dispatch(increaseFriendsValue());
                 } else {
                     await cancelInvitationOrFriendship(invitation.id);
+                    if (type === 'receive') {
+                        dispatch(decreaseFriendsValue());
+                    }
                 }
                 setInvProcess(false);
                 setRefresh(!refresh);
@@ -38,9 +48,9 @@ function FriendInvElement({ type, refresh, setRefresh, invitation }) {
                 </div>
                 <div className='post-info'>
                     {type === 'receive' ?
-                        <h6>{invitation.sender.name}</h6>
+                        <h6 style={{ cursor: 'pointer' }} onClick={() => navigate(`/user/${invitation.sender.id}/posts`)}>{invitation.sender.name}</h6>
                         :
-                        <h6>{invitation.recipient.name}</h6>
+                        <h6 style={{ cursor: 'pointer' }} onClick={() => navigate(`/user/${invitation.recipient.id}/posts`)}>{invitation.recipient.name}</h6>
                     }
                     <p>{formatDate(invitation.created_at)}</p>
                 </div>

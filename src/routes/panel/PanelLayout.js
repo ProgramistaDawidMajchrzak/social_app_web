@@ -4,14 +4,16 @@ import * as S from './style';
 import UserImg from '../../assets/user-sample.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { clearUser } from '../../features/userSlice';
-import { logout } from '../../services/auth.service';
+import { changeUserProfilePhoto, clearUser } from '../../features/userSlice';
+import { logout, changePhoto } from '../../services/auth.service';
 import loadingGif from '../../assets/loading-dark.svg';
 import FriendsInvitations from './friends/FriendsInvitations';
 import AdSample from '../../assets/ad-sample.png';
 
 function PanelLayout({ refreshInv, setRefreshInv }) {
     const user = useSelector((state) => state.user);
+    const friendsValue = useSelector((state) => state.friendsValue);
+    const postsValue = useSelector((state) => state.postsValue);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
@@ -28,21 +30,41 @@ function PanelLayout({ refreshInv, setRefreshInv }) {
             setLoading(false);
         }
     }
+
+    const handleFileInputChange = async (e) => {
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('profile_photo', file);
+        try {
+            let data = await changePhoto(formData);
+            dispatch(changeUserProfilePhoto(data.profile_photo));
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setLoading(false);
+        }
+    };
+
+    console.log(user);
+
     return (
         <S.LayoutStyle>
             <div className="panel-sidebar">
                 <div className="user-element">
+                    <label htmlFor="file-input" className="edit-icon">
+                        <i className="fa-solid fa-sm fa-pen-to-square" style={{ color: 'var(--gray)' }}></i>
+                        <input accept=".png, .jpg, .jpeg" id="file-input" type="file" style={{ display: 'none' }} onChange={(e) => handleFileInputChange(e)} />
+                    </label>
                     <div className="user-img">
-                        <img src={UserImg} alt="user-sample" />
+                        <img src={user.profile_photo ? user.profile_photo : UserImg} alt="user-sample" />
                     </div>
-                    <h5>{user.name}</h5>
+                    <h5 style={{ cursor: 'pointer' }} onClick={() => navigate(`/user/${user.id}/posts`)}>{user.name}</h5>
                     <div className="user-info">
                         <div className="info-el">
-                            <h6>63</h6>
+                            <h6>{postsValue}</h6>
                             <p>Posts</p>
                         </div>
                         <div className="info-el">
-                            <h6>20</h6>
+                            <h6>{friendsValue}</h6>
                             <p>Friends</p>
                         </div>
                     </div>
@@ -77,12 +99,11 @@ function PanelLayout({ refreshInv, setRefreshInv }) {
             </div>
             <div className="panel-main">
                 <div className="panel-header">
-                    search + settings + logout
-                    <div className="icon">
-                        <i className="fa-lg fa-solid fa-gear"
+                    {/* <div className="icon">
+                        <i onClick={() => navigate('/settings')} className="fa-lg fa-solid fa-gear"
                             style={{ color: 'var(--main-color)' }}
                         ></i>
-                    </div>
+                    </div> */}
                     <div className="icon">
                         {loading ? <img src={loadingGif} alt="loading-gif" /> :
                             <i onClick={handleLogout} className="fa-lg fa-solid fa-right-from-bracket"

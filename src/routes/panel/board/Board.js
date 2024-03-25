@@ -2,13 +2,15 @@ import React, { useRef, useState, useEffect } from 'react';
 import * as S from './style';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { allPosts } from '../../../services/posts.service';
+import { allPosts, addPost } from '../../../services/posts.service';
 import UserImg from '../../../assets/user-sample.png';
 import { format } from 'date-fns';
 import { addLike, deleteLike } from '../../../services/likes.service';
 import { addComment, getComments } from '../../../services/comments.service';
 import Loading from '../../../assets/loading.svg';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { increasePostsValue } from '../../../features/userSlice';
 
 function Board() {
     const [currentPage, setCurrentPage] = useState(1);
@@ -16,6 +18,7 @@ function Board() {
     const [loadingPosts, setLoadingPosts] = useState(true);
     const [loadingMorePosts, setLoadingMorePosts] = useState(false);
     const [noMorePosts, setNoMorePosts] = useState(false);
+    const [postAdded, setPostAdded] = useState(false);
     const boardContainerRef = useRef(null);
 
     const fetchAllPosts = async (page) => {
@@ -52,7 +55,7 @@ function Board() {
             setLoadingMorePosts(true);
             fetchAllPosts(currentPage);
         }
-    }, [currentPage, noMorePosts]);
+    }, [currentPage, noMorePosts, postAdded]);
 
     return (
         <S.BoardStyle>
@@ -67,7 +70,12 @@ function Board() {
                     </>
                     :
                     <>
-                        <AddPostSection />
+                        <AddPostSection
+                            postAdded={postAdded}
+                            setPostAdded={setPostAdded}
+                            setLoadingPosts={setLoadingPosts}
+                            setPosts={setPosts}
+                        />
                         {posts.map(post =>
                             <BoardElement
                                 post={post}
@@ -184,11 +192,11 @@ export function BoardElement({ post }) {
         <S.BoardEl>
             <div className="flex">
                 <div className="img">
-                    <img src={UserImg} alt="user-sample" />
+                    <img src={post.author_profile_photo ? `https://socialappapi-6239cbdff733.herokuapp.com/storage/${post.author_profile_photo}` : UserImg} alt="user-sample" />
                 </div>
                 <div className='post-info'>
                     <h6>
-                        <span onClick={() => navigate(`/user/${post.author.id}/posts`)}>{post.author.name}</span>
+                        <span onClick={() => navigate(`/user/${post.author_id}/posts`)}>{post.author_name}</span>
                         created post titled:
                         <span>{post.title}</span>
                     </h6>
@@ -223,10 +231,12 @@ export function BoardElement({ post }) {
                         <div className="comment">
                             <div className="flex">
                                 <div className="img">
-                                    <img src={UserImg} alt="user-sample" />
+                                    <img src={post.first_comment_user_profile_photo ? `https://socialappapi-6239cbdff733.herokuapp.com/storage/${post.first_comment_user_profile_photo}` : UserImg} alt="user-sample" />
                                 </div>
                                 <div className='post-info'>
-                                    <h6><span onClick={() => navigate(`/user/${post.author.id}/posts`)}>{post.firstcomment.user_name}</span></h6>
+                                    {/* error */}
+                                    <h6><span onClick={() => navigate(`/user/${post.firstcomment.user_id}/posts`)}>{post.firstcomment.user_name}</span></h6>
+                                    {/* error */}
                                     <p>{formatDate(post.firstcomment.created_at)}</p>
                                 </div>
                             </div>
@@ -284,7 +294,7 @@ function Comment({ comment }) {
         <div className="comment">
             <div className="flex">
                 <div className="img">
-                    <img src={UserImg} alt="user-sample" />
+                    <img src={comment.comment_user_profile_photo ? `https://socialappapi-6239cbdff733.herokuapp.com/storage/${comment.comment_user_profile_photo}` : UserImg} alt="user-sample" />
                 </div>
                 <div className='post-info'>
                     <h6><span onClick={() => navigate(`/user/${comment.user_id}/posts`)}>{comment.user_name}</span></h6>
@@ -310,14 +320,36 @@ export function BoardSkeleton() {
     )
 }
 
-function AddPostSection() {
+function AddPostSection({ postAdded, setPostAdded, setLoadingPosts, setPosts }) {
+
+    const dispatch = useDispatch();
 
     const [title, setTitle] = useState("");
     const [desc, setDesc] = useState("");
+    const [postProcess, setPostProcess] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (title.length && desc.length && !postProcess) {
+            setPostProcess(true);
+            setLoadingPosts(true);
+            try {
+                await addPost({ 'title': title, 'description': desc });
+                setPosts([]);
+                setPostAdded(!postAdded);
+                setPostProcess(false);
+                setTitle('');
+                setDesc('');
+                dispatch(increasePostsValue());
+            } catch (error) {
+                console.error('Error fetching data:', error.response.data);
+            }
+        }
+    }
 
     return (
         <S.AddPostStyle>
-            <form>
+            <form onSubmit={e => handleSubmit(e)}>
                 <input
                     value={title}
                     onChange={e => setTitle(e.target.value)}
@@ -331,6 +363,7 @@ function AddPostSection() {
                     cols="60"
                     rows="4"
                 ></textarea>
+                <input type="submit" value="ADD POST" />
             </form>
         </S.AddPostStyle>
     );

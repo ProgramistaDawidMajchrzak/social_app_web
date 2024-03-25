@@ -11,6 +11,7 @@ function AllPeople({ refreshInv, setRefreshInv }) {
     const fetchAllPeople = async () => {
         try {
             const data = await getAllPeople();
+            console.log(data);
             setPeople(data.people);
             setLoadingPeople(false);
         } catch (error) {
@@ -37,7 +38,7 @@ function AllPeople({ refreshInv, setRefreshInv }) {
                     />)
             }
             {(people && people.length === 0) &&
-                <p>YThere are no other users for now</p>
+                <p>There are no other users for now</p>
 
             }
             {loadingPeople &&

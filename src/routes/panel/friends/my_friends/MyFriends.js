@@ -5,7 +5,8 @@ import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { getMyFriends, cancelInvitationOrFriendship, addInvitation } from '../../../../services/friends.service';
 import Skeleton from 'react-loading-skeleton';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { decreaseFriendsValue } from '../../../../features/userSlice';
 
 function MyFriends({ refreshInv, setRefreshInv }) {
 
@@ -59,6 +60,7 @@ export default MyFriends;
 
 export function FriendViewElement({ route, refresh, setRefresh, myId, res }) {
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const formatDate = (date) => {
@@ -79,12 +81,11 @@ export function FriendViewElement({ route, refresh, setRefresh, myId, res }) {
 
 
     const myFriend = handleFriend(myId, res);
-    console.log(myFriend);
 
     const handleDeleteFriend = async (id) => {
-        console.log(id);
         try {
             await cancelInvitationOrFriendship(id);
+            dispatch(decreaseFriendsValue());
             setRefresh(!refresh);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -104,7 +105,12 @@ export function FriendViewElement({ route, refresh, setRefresh, myId, res }) {
         <S.FriendViewStyle>
             <div className="flex">
                 <div className="img">
-                    <img src={UserImg} alt="user-sample" />
+                    {route === 'all_people' ?
+                        <img src={res.profile_photo ? `https://socialappapi-6239cbdff733.herokuapp.com/storage/${res.profile_photo}` : UserImg} alt="user-sample" />
+                        :
+                        <img src={myFriend.profile_photo ? `https://socialappapi-6239cbdff733.herokuapp.com/storage/${myFriend.profile_photo}` : UserImg} alt="user-sample" />
+
+                    }
                 </div>
                 {route === 'my_friends' || route === 'user_friends' ?
                     <div className='friend-info'>
@@ -113,7 +119,7 @@ export function FriendViewElement({ route, refresh, setRefresh, myId, res }) {
                     </div>
                     :
                     <div className='friend-info'>
-                        <h6>{res.name}</h6>
+                        <h6 onClick={() => navigate(`/user/${res.id}/posts`)}>{res.name}</h6>
                     </div>
                 }
             </div>

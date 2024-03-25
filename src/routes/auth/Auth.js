@@ -7,7 +7,7 @@ import { Motion } from '../../components/Motion';
 import { login, register } from '../../services/auth.service';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../../features/userSlice';
+import { setUser, setFriendsValue, setPostsValue } from '../../features/userSlice';
 
 
 function AuthLayout() {
@@ -46,9 +46,11 @@ export function LoginForm() {
             try {
                 const data = await login(formData);
                 setLoading(false);
-                console.log(data.user);
+                console.log(data.friends_count);
                 localStorage.setItem('accessToken', data.access_token);
                 dispatch(setUser(data.user));
+                dispatch(setFriendsValue(data.friends_count));
+                dispatch(setPostsValue(data.posts_count));
                 navigate('/board');
             } catch (error) {
                 console.error('Error fetching data:', error.response.data);

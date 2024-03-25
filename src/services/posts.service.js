@@ -22,7 +22,7 @@ export const allPostsByUser = async (user_id, page) => {
 
 export const addPost = async (body) => {
     try {
-        const response = await request.post('/auth/login', body);
+        const response = await request.post('/posts/add', body);
         return response.data;
     } catch (error) {
         console.log(error);

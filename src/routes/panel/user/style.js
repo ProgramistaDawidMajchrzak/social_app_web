@@ -53,6 +53,26 @@ export const UserViewStyle = styled.div`
                     font-weight: 500;
                     font-size: .9rem;
                 }
+                form{
+                    display: flex;
+                    margin-top: .6rem;
+                    textarea{
+                        display: block;
+                        border: 1px solid var(--main-color);
+                        border-radius: .3rem 0 0 .3rem;
+                        padding: .3rem .7rem;
+                        resize: none;
+                        width: calc(100% - 4rem);
+                    }
+                    input[type='submit']{
+                        background-color: var(--main-color);
+                        font-weight: 600;
+                        font-size: .8rem;
+                        color: var(--gray);
+                        border-radius: 0 .3rem .3rem 0;
+                        cursor: pointer;
+                    }
+                }
             }
             .skeleton-content{
                 width: 90%;

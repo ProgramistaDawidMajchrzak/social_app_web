@@ -178,23 +178,37 @@ export const BoardEl = styled.div`
 `;
 
 export const AddPostStyle = styled.div`
-    height: 160px;
+    height: 200px;
     width: 100%;
     background-color: var(--white);
     border-radius: .5rem;
     margin: 1.4rem 0;
     form{
-        margin: .8rem 1.2rem;
+        margin: .8rem 0;
         padding-top: .8rem;
+        width: 90%;
+        position: relative;
+        left: 50%;
+        transform: translate(-50%, 0);
         input, textarea{
+            display: block;
             border: 1px solid var(--main-color);
             border-radius: .3rem;
-            padding: .2rem .7rem;
+            padding: .3rem .7rem;
             resize: none;
+            margin-top: .6rem;
+            width: calc(100% - 1.4rem);
             &::placeholder{
                 font-family: 'Montserrat';
                 color: grey;
             }
+        }
+        input[type='submit']{
+            width: 100%;
+            background-color: var(--main-color);
+            color: var(--gray);
+            font-weight: 600;
+            cursor: pointer;
         }
     }
 `;

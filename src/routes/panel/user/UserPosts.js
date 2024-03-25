@@ -48,8 +48,8 @@ function UserPosts() {
             setLoadingMorePosts(true);
             fetchUserPosts(userId, currentPage);
         }
-    }, [currentPage, noMorePosts]);
 
+    }, [currentPage, noMorePosts]);
 
     return (
         <BoardStyle>

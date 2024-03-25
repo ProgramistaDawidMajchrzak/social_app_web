@@ -13,6 +13,26 @@ export const LayoutStyle = styled.div`
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            .edit-icon {
+                width: 25px;
+                height: 25px;
+                border-radius: 25px;
+                background-color: #117e11;
+                border: 3px solid var(--gray);
+                position: absolute;
+                z-index: 99;
+                left: 60%;
+                top: 35%;
+                transform: translate(-50%, -50%);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                }
+                .edit-icon i {
+                pointer-events: none;
+                }
             .user-img{
                 width: 80px;
                 height: 80px;

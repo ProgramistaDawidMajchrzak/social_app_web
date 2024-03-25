@@ -3,6 +3,7 @@ import './App.css';
 import {
   Route,
   Routes,
+  Navigate
 } from "react-router-dom";
 import AuthLayout, { LoginForm, RegisterForm } from "./routes/auth/Auth";
 import Board from './routes/panel/board/Board';
@@ -18,6 +19,7 @@ import UserFriends from './routes/panel/user/UserFriends';
 
 function App() {
   const [refreshInv, setRefreshInv] = useState(false);
+  const isLoggedIn = localStorage.getItem('accessToken');
   return (
     <>
       <Routes>
@@ -36,6 +38,11 @@ function App() {
             <Route path="/user/:userId/friends" element={<UserFriends refreshInv={refreshInv} setRefreshInv={setRefreshInv} />} />
           </Route>
         </Route>
+        {!isLoggedIn ?
+          <Route path="*" element={<Navigate to="/login" />} />
+          :
+          <Route path="*" element={<Navigate to="/board" />} />
+        }
       </Routes>
       <ToastContainer
         autoClose={2500}
